@@ -7,6 +7,7 @@ import com.dashwood.daggertest.trending.TrendingReposController;
 import dagger.Binds;
 import dagger.Module;
 import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
 import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = {

@@ -1,20 +1,18 @@
 package com.dashwood.daggertest.di;
-
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bluelinelabs.conductor.Controller;
-import com.dashwood.daggertest.extra.BaseActivity;
 
 public class Injector {
     private Injector() {
 
     }
 
-    public static void inject(Activity activity) {
-        ActivityInjector.get(activity).inject(activity);
+    public static void inject(AppCompatActivity appCompatActivity) {
+        ActivityInjector.get(appCompatActivity).inject(appCompatActivity);
     }
 
-    public static void clearComponent(Activity activity) {
+    public static void clearComponent(AppCompatActivity activity) {
         ActivityInjector.get(activity).clear(activity);
     }
 

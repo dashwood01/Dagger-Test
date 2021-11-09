@@ -3,6 +3,8 @@ package com.dashwood.daggertest.extra;
 import android.app.Application;
 import android.content.Context;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,6 +16,7 @@ public class ApplicationModule {
         this.application = application;
     }
 
+    @Singleton
     @Provides
     Context provideApplicationContext() {
         return application;

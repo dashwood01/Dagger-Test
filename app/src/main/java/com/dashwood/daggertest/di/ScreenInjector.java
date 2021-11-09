@@ -2,6 +2,8 @@ package com.dashwood.daggertest.di;
 
 import android.app.Activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bluelinelabs.conductor.Controller;
 import com.dashwood.daggertest.extra.BaseActivity;
 import com.dashwood.daggertest.extra.BaseController;

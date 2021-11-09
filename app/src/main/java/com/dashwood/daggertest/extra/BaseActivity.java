@@ -1,6 +1,7 @@
 package com.dashwood.daggertest.extra;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.ViewGroup;
 
 import com.bluelinelabs.conductor.Conductor;
@@ -8,6 +9,7 @@ import com.bluelinelabs.conductor.Controller;
 import com.bluelinelabs.conductor.ControllerChangeHandler;
 import com.bluelinelabs.conductor.Router;
 import com.dashwood.daggertest.R;
+import com.dashwood.daggertest.di.ActivityInjector;
 import com.dashwood.daggertest.di.Injector;
 import com.dashwood.daggertest.di.ScreenInjector;
 import com.dashwood.daggertest.ui.ScreenNavigator;
@@ -21,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import dagger.android.AndroidInjection;
+
 public abstract class BaseActivity extends AppCompatActivity {
     @Inject
     ScreenInjector screenInjector;
@@ -31,7 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Router router;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
         if (savedInstanceState != null) {
             instanceId = savedInstanceState.getString(INSTANCE_ID_KEY);
         } else {
