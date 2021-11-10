@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.dashwood.daggertest.BuildConfig;
 import com.dashwood.daggertest.di.ActivityInjector;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +16,12 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
+import timber.log.Timber;
 
 public class A extends Application {
 
     @Inject
-    ActivityInjector activityInjector;u
+    ActivityInjector activityInjector;
 
     @Override
     public void onCreate() {
@@ -29,6 +31,9 @@ public class A extends Application {
                 .applicationModule(new ApplicationModule(this))
                 .build();
         component.inject(this);
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
     }
 
     public ActivityInjector getActivityInjector() {

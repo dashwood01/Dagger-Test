@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DaggerTest</string>
+    <string name="error_repos">Error from repos</string>
 </resources>
