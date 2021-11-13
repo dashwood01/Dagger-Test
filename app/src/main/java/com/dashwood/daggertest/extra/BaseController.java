@@ -2,6 +2,7 @@ package com.dashwood.daggertest.extra;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
 
 public abstract class BaseController extends Controller {
 
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
     private Unbinder unbinder;
     private boolean isInjected = false;
 
@@ -41,7 +42,8 @@ public abstract class BaseController extends Controller {
         unbinder = ButterKnife.bind(view);
         onViewBind(view);
         disposable.addAll(subscription());
-        return null;
+        Log.i("LOG", "Base controller view");
+        return view;
     }
 
     protected void onViewBind(View view) {

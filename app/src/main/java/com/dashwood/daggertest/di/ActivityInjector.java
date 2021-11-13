@@ -1,9 +1,11 @@
 package com.dashwood.daggertest.di;
+
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dashwood.daggertest.extra.A;
+import com.dashwood.daggertest.extra.ActivityInjectorModule;
 import com.dashwood.daggertest.extra.BaseActivity;
 
 import java.util.HashMap;
@@ -13,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
 
 public class ActivityInjector {
 
@@ -21,7 +22,8 @@ public class ActivityInjector {
     private Map<Class<? extends AppCompatActivity>, Provider<AndroidInjector.Factory<? extends AppCompatActivity>>> activityInjectors;
 
     @Inject
-    ActivityInjector(Map<Class<? extends AppCompatActivity>, Provider<AndroidInjector.Factory<? extends AppCompatActivity>>> activityInjectors) {
+    public ActivityInjector(Map<Class<? extends AppCompatActivity>,
+            Provider<AndroidInjector.Factory<? extends AppCompatActivity>>> activityInjectors) {
         Log.i("LOG", "NEW CLASS RUN");
         if (activityInjectors == null) {
             Log.i("LOG", "AC INJS Null");
@@ -30,13 +32,13 @@ public class ActivityInjector {
     }
 
     @SuppressWarnings("ConstantConditions")
-    void inject(AppCompatActivity activity) {
+    public void inject(AppCompatActivity activity) {
         if (!(activity instanceof BaseActivity)) {
             throw new IllegalArgumentException("Activity must extends BaseActivity");
         }
         String instanceId = ((BaseActivity) activity).getInstanceId();
         if (cache.containsKey(instanceId)) {
-            ((AndroidInjector<AppCompatActivity>) cache.get(instanceId)).inject(activity);
+            cache.get(instanceId).inject(activity);
             return;
         }
         //noinspection unchecked
@@ -48,15 +50,15 @@ public class ActivityInjector {
     }
 
     void clear(AppCompatActivity activity) {
-        if (!(activity instanceof BaseActivity)) {
+        if (activity == null) {
             throw new IllegalArgumentException("Activity must extends BaseActivity");
         }
         cache.remove(((BaseActivity) activity).getInstanceId());
     }
 
-    static ActivityInjector get(AppCompatActivity context) {
-        Log.i("LOG", "A Injector");
+    public static ActivityInjector get(AppCompatActivity context) {
         return ((A) (context.getApplication())).getActivityInjector();
     }
+
 }
 

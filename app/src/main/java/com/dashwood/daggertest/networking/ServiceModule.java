@@ -1,5 +1,7 @@
 package com.dashwood.daggertest.networking;
 
+import android.util.Log;
+
 import com.dashwood.daggertest.model.AdapterFactory;
 import com.dashwood.daggertest.model.ZoneDateTimeAdapter;
 import com.squareup.moshi.Moshi;
@@ -20,6 +22,7 @@ public abstract class ServiceModule {
     @Provides
     @Singleton
     static Moshi provideMoshi() {
+        Log.i("LOG", "Provide moshi");
         return new Moshi.Builder()
                 .add(AdapterFactory.create())
                 .add(new ZoneDateTimeAdapter())

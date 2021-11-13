@@ -1,7 +1,11 @@
 package com.dashwood.daggertest.extra;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.bluelinelabs.conductor.Conductor;
@@ -12,6 +16,7 @@ import com.dashwood.daggertest.R;
 import com.dashwood.daggertest.di.ActivityInjector;
 import com.dashwood.daggertest.di.Injector;
 import com.dashwood.daggertest.di.ScreenInjector;
+import com.dashwood.daggertest.ui.DefaultScreenNavigator;
 import com.dashwood.daggertest.ui.ScreenNavigator;
 
 import java.util.UUID;
@@ -30,29 +35,29 @@ public abstract class BaseActivity extends AppCompatActivity {
     ScreenInjector screenInjector;
     @Inject
     ScreenNavigator screenNavigator;
+
     private static final String INSTANCE_ID_KEY = "instance_id";
     private String instanceId;
     private Router router;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             instanceId = savedInstanceState.getString(INSTANCE_ID_KEY);
         } else {
             instanceId = UUID.randomUUID().toString();
         }
         Injector.inject(this);
+        super.onCreate(savedInstanceState);
+        setContentView(layoutRes());
         ViewGroup screenContainer = findViewById(R.id.screen_container);
         if (screenContainer == null) {
             throw new IllegalArgumentException("Activity must have a view name 'screen_container'");
         }
         router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
         screenNavigator.initWithRouter(router, initialScreen());
-        setContentView(layoutRes());
         monitorBackStack();
-        super.onCreate(savedInstanceState);
-        super.onBackPressed();
+        // super.onBackPressed();
     }
 
     @LayoutRes

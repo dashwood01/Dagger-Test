@@ -1,5 +1,7 @@
 package com.dashwood.daggertest.ui;
 
+import android.util.Log;
+
 import com.bluelinelabs.conductor.Controller;
 import com.bluelinelabs.conductor.Router;
 import com.bluelinelabs.conductor.RouterTransaction;
@@ -14,11 +16,12 @@ public class DefaultScreenNavigator implements ScreenNavigator {
 
     @Inject
     DefaultScreenNavigator() {
-
+        Log.i("LOG","Default screen navigator");
     }
 
     @Override
     public void initWithRouter(Router router, Controller rootScreen) {
+        Log.i("LOG", "init with router");
         this.router = router;
         if (router.hasRootController()) {
             return;
@@ -28,7 +31,7 @@ public class DefaultScreenNavigator implements ScreenNavigator {
 
     @Override
     public boolean pop() {
-        return router!=null && router.handleBack();
+        return router != null && router.handleBack();
     }
 
     @Override

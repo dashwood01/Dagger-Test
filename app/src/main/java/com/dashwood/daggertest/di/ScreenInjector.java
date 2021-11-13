@@ -30,7 +30,7 @@ public class ScreenInjector {
     }
 
     void inject(Controller controller) {
-        if (!(controller instanceof BaseController)) {
+        if (controller == null) {
             throw new IllegalArgumentException("Controller must extends BaseController");
         }
         String instanceId = controller.getInstanceId();
@@ -47,17 +47,16 @@ public class ScreenInjector {
     }
 
     void clear(Controller controller) {
-        if (!(controller instanceof BaseController)) {
+        if (controller == null) {
             throw new IllegalArgumentException("Controller must extends BaseController");
         }
         cache.remove(controller.getInstanceId());
     }
 
     static ScreenInjector get(Activity activity) {
-        if (!(activity instanceof BaseActivity)) {
+        if (activity == null) {
             throw new IllegalArgumentException("Controller must be hosted BaseActivity");
         }
-
         return ((BaseActivity) activity).getScreenInjector();
     }
 }
