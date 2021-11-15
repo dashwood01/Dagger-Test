@@ -12,7 +12,7 @@ public class Injector {
     }
 
     public static void inject(AppCompatActivity appCompatActivity) {
-      //  ActivityInjector.get(appCompatActivity).inject(appCompatActivity);
+        ActivityInjector.get(appCompatActivity).inject(appCompatActivity);
     }
 
     public static void clearComponent(AppCompatActivity activity) {

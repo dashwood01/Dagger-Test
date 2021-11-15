@@ -1,5 +1,7 @@
 package com.dashwood.daggertest.trending;
 
+import android.util.Log;
+
 import com.dashwood.daggertest.di.ScreenScope;
 import com.dashwood.daggertest.adapter.AdapterRecItemRepo;
 import com.dashwood.daggertest.data.RepoRequester;
@@ -29,6 +31,6 @@ class TrendingReposPresenter implements AdapterRecItemRepo.RepoClickedListener {
 
     @Override
     public void onRepoClicked(Repo repo) {
-
+        Log.i("LOG", repo.name());
     }
 }

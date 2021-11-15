@@ -1,12 +1,10 @@
 package com.dashwood.daggertest.di;
 
 import android.app.Activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log;
 
 import com.bluelinelabs.conductor.Controller;
 import com.dashwood.daggertest.extra.BaseActivity;
-import com.dashwood.daggertest.extra.BaseController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,17 +13,17 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 
 @ActivityScope
 public class ScreenInjector {
 
-    private final Map<Class<? extends Controller>, Provider<AndroidInjector.Factory<? extends Controller>>> screenInjector;
     private final Map<String, AndroidInjector<Controller>> cache = new HashMap<>();
+    private final Map<Class<?>, Provider<AndroidInjector.Factory<?>>> screenInjector;
 
     @Inject
-    ScreenInjector(Map<Class<? extends Controller>, Provider<AndroidInjector.Factory<? extends Controller>>> screenInjector) {
+    ScreenInjector(Map<Class<?>, Provider<AndroidInjector.Factory<?>>> screenInjector) {
+        Log.i("LOG", "Screen injector inject is run");
         this.screenInjector = screenInjector;
     }
 
@@ -38,9 +36,21 @@ public class ScreenInjector {
             Objects.requireNonNull(cache.get(instanceId)).inject(controller);
             return;
         }
+        Log.i("LOG", "B");
+        if (screenInjector == null) {
+            throw new IllegalArgumentException("Screen injector is null");
+        }
+
+        for (Map.Entry<Class<?>, Provider<AndroidInjector.Factory<?>>> entry : screenInjector.entrySet()) {
+            Log.i("LOG", "KEY : " + entry.getKey() + " Value : " + entry.getValue());
+        }
+        Log.i("LOG", "screen injector size : " + screenInjector.size());
+        if (screenInjector.get(controller.getClass()) == null) {
+            throw new IllegalArgumentException("Provider is null");
+        }
         //noinspection unchecked
         AndroidInjector.Factory<Controller> injectFactory =
-                (AndroidInjector.Factory<Controller>) Objects.requireNonNull(screenInjector.get(controller.getClass())).get();
+                (AndroidInjector.Factory<Controller>) screenInjector.get(controller.getClass()).get();
         AndroidInjector<Controller> injector = injectFactory.create(controller);
         cache.put(instanceId, injector);
         injector.inject(controller);

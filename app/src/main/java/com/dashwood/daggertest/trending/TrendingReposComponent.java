@@ -4,7 +4,6 @@ import com.dashwood.daggertest.di.ScreenScope;
 
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
 
 @ScreenScope
 @Subcomponent

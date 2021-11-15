@@ -1,26 +1,17 @@
 package com.dashwood.daggertest.trending;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.dashwood.daggertest.R;
 import com.dashwood.daggertest.adapter.AdapterRecItemRepo;
+import com.dashwood.daggertest.databinding.ScreenTrendingReposBinding;
 import com.dashwood.daggertest.extra.BaseController;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.Disposable;
 
@@ -31,17 +22,24 @@ public class TrendingReposController extends BaseController {
     @Inject
     TrendingReposViewModel viewModel;
 
-    @BindView(R.id.recItemRepo)
-    RecyclerView recItemRepo;
-    @BindView(R.id.txtError)
-    TextView txtError;
-    @BindView(R.id.progressLoading)
-    ProgressBar progressLoading;
+    private ScreenTrendingReposBinding binding;
+    private AdapterRecItemRepo adapterRecItemRepo;
 
     @Override
     protected void onViewBind(View view) {
-        recItemRepo.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recItemRepo.setAdapter(new AdapterRecItemRepo(presenter));
+        /*
+        binding = ScreenTrendingReposBinding.inflate(LayoutInflater.from(view.getContext()),
+                (ViewGroup) view.getParent(), false);
+
+         */
+        if (view == null) {
+            throw new IllegalArgumentException("View is null");
+        }
+        binding = ScreenTrendingReposBinding.bind(view);
+        binding.recItemRepo.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        adapterRecItemRepo = new AdapterRecItemRepo(presenter);
+        binding.recItemRepo.setAdapter(adapterRecItemRepo);
+        Log.i("LOG", "Progress from on view bind");
     }
 
     @Override
@@ -50,26 +48,32 @@ public class TrendingReposController extends BaseController {
                 viewModel.loading()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(loading -> {
-                    progressLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
-                    recItemRepo.setVisibility(loading ? View.GONE : View.VISIBLE);
-                    txtError.setVisibility(loading ? View.GONE : txtError.getVisibility());
+                    binding.progressLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
+                    binding.recItemRepo.setVisibility(loading ? View.GONE : View.VISIBLE);
+                    binding.txtError.setVisibility(loading ? View.GONE : binding.txtError.getVisibility());
                 }),
                 viewModel.repos()
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(((AdapterRecItemRepo) Objects.requireNonNull(recItemRepo.getAdapter()))::sendItems),
+                        .subscribe(list -> {
+                    Log.i("LOG", "Size from response : " + list.size());
+                    adapterRecItemRepo.sendItems(list);
+
+                }),
                 viewModel.error()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(error -> {
                     if (error == -1) {
-                        txtError.setVisibility(View.GONE);
-                        txtError.setText("");
+                        binding.txtError.setVisibility(View.GONE);
+                        binding.txtError.setText("");
                         return;
                     }
-                    txtError.setVisibility(View.VISIBLE);
-                    recItemRepo.setVisibility(View.GONE);
-                    txtError.setText(error);
+                    binding.txtError.setVisibility(View.VISIBLE);
+                    binding.recItemRepo.setVisibility(View.GONE);
+                    binding.txtError.setText(error);
                 })
-        };
+        }
+
+                ;
     }
 
     @Override

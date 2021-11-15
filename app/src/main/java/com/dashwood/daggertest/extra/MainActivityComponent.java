@@ -9,7 +9,6 @@ import com.dashwood.daggertest.ui.NavigationModule;
 
 import dagger.Subcomponent;
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
 
 @ActivityScope
 @Subcomponent(modules = {

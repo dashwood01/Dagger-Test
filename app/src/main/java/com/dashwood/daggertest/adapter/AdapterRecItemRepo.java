@@ -1,8 +1,7 @@
 package com.dashwood.daggertest.adapter;
 
-import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -35,6 +34,7 @@ public class AdapterRecItemRepo extends RecyclerView.Adapter<AdapterRecItemRepo.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Repo repo = repos.get(position);
+        Log.i("LOG", "Adapter now run");
         holder.binding.txtName.setText(repo.name());
         holder.binding.txtDescription.setText(repo.description());
         holder.binding.txtCount.setText(String.valueOf(repo.stargazersCount()));
@@ -43,10 +43,12 @@ public class AdapterRecItemRepo extends RecyclerView.Adapter<AdapterRecItemRepo.
 
     @Override
     public int getItemCount() {
+        Log.i("LOG", "Item count : " + repos.size());
         return repos.size();
     }
 
     public void sendItems(List<Repo> list) {
+        Log.i("LOG", "Send items from adapter ,,, size : " + list.size());
         if (list == null) {
             repos.clear();
             notifyDataSetChanged();
@@ -60,7 +62,7 @@ public class AdapterRecItemRepo extends RecyclerView.Adapter<AdapterRecItemRepo.
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private RecItemRepoBinding binding;
+        private final RecItemRepoBinding binding;
 
         public ViewHolder(@NonNull RecItemRepoBinding itemView) {
             super(itemView.getRoot());

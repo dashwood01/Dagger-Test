@@ -1,5 +1,7 @@
 package com.dashwood.daggertest.trending;
 
+import android.util.Log;
+
 import com.dashwood.daggertest.model.Repo;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.Json;
@@ -14,6 +16,7 @@ public abstract class TrendingReposResponse {
     public abstract List<Repo> repos();
 
     public static JsonAdapter<TrendingReposResponse> jsonAdapter(Moshi moshi) {
+        Log.i("LOG", "Json adapter f rom trending repos response");
         return new AutoValue_TrendingReposResponse.MoshiJsonAdapter(moshi);
     }
 }

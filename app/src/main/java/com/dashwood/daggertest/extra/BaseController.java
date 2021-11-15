@@ -7,13 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bluelinelabs.conductor.Controller;
-import com.dashwood.daggertest.di.Injector;
-
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.viewbinding.ViewBinding;
+
+import com.bluelinelabs.conductor.Controller;
+import com.dashwood.daggertest.di.Injector;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -29,6 +28,7 @@ public abstract class BaseController extends Controller {
     @Override
     protected void onContextAvailable(@NonNull Context context) {
         if (!isInjected) {
+            Log.i("LOG", "From base activity on contect available");
             Injector.inject(this);
             isInjected = true;
         }
@@ -38,7 +38,7 @@ public abstract class BaseController extends Controller {
     @NonNull
     @Override
     protected final View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container, @Nullable Bundle savedViewState) {
-        View view = inflater.inflate(layoutRes(), container);
+        View view = inflater.inflate(layoutRes(), container, false);
         unbinder = ButterKnife.bind(view);
         onViewBind(view);
         disposable.addAll(subscription());

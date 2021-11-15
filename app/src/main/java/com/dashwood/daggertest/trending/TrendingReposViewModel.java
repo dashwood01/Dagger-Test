@@ -1,7 +1,6 @@
 package com.dashwood.daggertest.trending;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.dashwood.daggertest.R;
 import com.dashwood.daggertest.di.ScreenScope;

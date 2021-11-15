@@ -1,13 +1,12 @@
 package com.dashwood.daggertest.di;
 
-import com.bluelinelabs.conductor.Controller;
 import com.dashwood.daggertest.trending.TrendingReposComponent;
 import com.dashwood.daggertest.trending.TrendingReposController;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
+import dagger.multibindings.ClassKey;
 import dagger.multibindings.IntoMap;
 
 @Module(subcomponents = {
@@ -16,7 +15,7 @@ import dagger.multibindings.IntoMap;
 public abstract class MainScreenBindingModule {
     @Binds
     @IntoMap
-    @ControllerKey(TrendingReposController.class)
-    abstract AndroidInjector.Factory<? extends Controller> bindingTrendingReposInjector(TrendingReposComponent.builder builder);
+    @ClassKey(TrendingReposController.class)
+    abstract AndroidInjector.Factory<?> bindingTrendingReposInjector(TrendingReposComponent.builder builder);
 
 }

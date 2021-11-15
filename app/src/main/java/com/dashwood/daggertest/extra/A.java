@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.dashwood.daggertest.BuildConfig;
 import com.dashwood.daggertest.di.ActivityInjector;
+import com.dashwood.daggertest.di.ScreenInjector;
+import com.dashwood.daggertest.ui.DefaultScreenNavigator;
 
 import javax.inject.Inject;
 
@@ -16,15 +18,14 @@ public class A extends Application {
 
     @Inject
     ActivityInjector activityInjector;
-    ApplicationComponent component;
 
+    ApplicationComponent component;
 
     @Override
     public void onCreate() {
         super.onCreate();
         component = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-                .activityInjectorModule(new ActivityInjectorModule())
                 .build();
         component.inject(this);
         if (BuildConfig.DEBUG) {

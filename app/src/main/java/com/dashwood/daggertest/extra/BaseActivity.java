@@ -1,34 +1,26 @@
 package com.dashwood.daggertest.extra;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-
-import com.bluelinelabs.conductor.Conductor;
-import com.bluelinelabs.conductor.Controller;
-import com.bluelinelabs.conductor.ControllerChangeHandler;
-import com.bluelinelabs.conductor.Router;
-import com.dashwood.daggertest.R;
-import com.dashwood.daggertest.di.ActivityInjector;
-import com.dashwood.daggertest.di.Injector;
-import com.dashwood.daggertest.di.ScreenInjector;
-import com.dashwood.daggertest.ui.DefaultScreenNavigator;
-import com.dashwood.daggertest.ui.ScreenNavigator;
-
-import java.util.UUID;
-
-import javax.inject.Inject;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import dagger.android.AndroidInjection;
+import com.bluelinelabs.conductor.Conductor;
+import com.bluelinelabs.conductor.Controller;
+import com.bluelinelabs.conductor.ControllerChangeHandler;
+import com.bluelinelabs.conductor.Router;
+import com.dashwood.daggertest.R;
+import com.dashwood.daggertest.di.Injector;
+import com.dashwood.daggertest.di.ScreenInjector;
+import com.dashwood.daggertest.ui.ScreenNavigator;
+
+import java.util.UUID;
+
+import javax.inject.Inject;
 
 public abstract class BaseActivity extends AppCompatActivity {
     @Inject
@@ -55,7 +47,12 @@ public abstract class BaseActivity extends AppCompatActivity {
             throw new IllegalArgumentException("Activity must have a view name 'screen_container'");
         }
         router = Conductor.attachRouter(this, screenContainer, savedInstanceState);
+        //screenNavigator = ((A) getApplication()).getDefaultScreenNavigator();
+        if (screenNavigator == null) {
+            throw new IllegalArgumentException("screen nav is null");
+        }
         screenNavigator.initWithRouter(router, initialScreen());
+        Log.i("LOG", "A in base activity");
         monitorBackStack();
         // super.onBackPressed();
     }
@@ -75,6 +72,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract Controller initialScreen();
 
+    public ScreenInjector getScreenInjector() {
+        return screenInjector;
+    }
+
     @Override
     public void onBackPressed() {
         if (!screenNavigator.pop()) super.onBackPressed();
@@ -88,10 +89,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (isFinishing()) {
             Injector.clearComponent(this);
         }
-    }
-
-    public ScreenInjector getScreenInjector() {
-        return screenInjector;
     }
 
     private void monitorBackStack() {
