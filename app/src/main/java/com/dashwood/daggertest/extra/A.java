@@ -1,7 +1,6 @@
 package com.dashwood.daggertest.extra;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.dashwood.daggertest.BuildConfig;
 import com.dashwood.daggertest.di.ActivityInjector;
@@ -10,8 +9,6 @@ import com.dashwood.daggertest.ui.DefaultScreenNavigator;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjector;
-import dagger.android.HasAndroidInjector;
 import timber.log.Timber;
 
 public class A extends Application {
